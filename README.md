@@ -1,2 +1,3 @@
-# ansible-collection-liftoff
-Collection of roles for setting up cloud infrastructure
+# Ansible Collection - bitshifted.liftoff
+
+Documentation for the collection.

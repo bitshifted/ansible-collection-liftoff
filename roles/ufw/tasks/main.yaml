@@ -1,0 +1,40 @@
+---
+- name: Ensure UFW is installed
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+    update_cache: true
+
+- name: Allow SSH connections
+  community.general.ufw:
+    rule: allow
+    port: "{{ ssh_port }}"
+    proto: tcp
+    from_ip: "{{ ssh_allowed_ip }}"
+
+- name: Configure specific incoming rules
+  community.general.ufw:
+    rule: allow
+    direction: 'in'
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+    from_ip: "{{ item.from_ip | default('any') }}"
+  loop: "{{ ufw_rules }}"
+
+- name: Allow routed DNS queries
+  community.general.ufw:
+    rule: allow
+    route: true
+    interface_in: "{{ item }}"
+    interface_out: "{{ public_interface }}"
+  loop: "{{ private_interfaces }}"
+  when: "enable_packet_routing"
+
+- name: Disable all incoming connections by default
+  community.general.ufw:
+    state: enabled
+    direction: incoming
+    policy: reject
+    log: 'on'
+    logging: 'medium'
+  when: "disable_incoming"

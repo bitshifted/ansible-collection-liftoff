@@ -1,0 +1,9 @@
+---
+ssh_port: 22
+ssh_allowed_ip: any
+ufw_rules: []
+enable_packet_routing: false
+public_interface: eth0 # Default public interface name
+private_interfaces:
+  - enp7s0 # Default private interface name
+disable_incoming: true
