@@ -1,0 +1,49 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+name: Build pipeline
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.calculate-version.outputs.version-string }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Configure version information
+        id: calculate-version
+        uses: bitshifted/git-auto-semver@v2
+        with:
+          create_tag: true
+          initial_version: 0.1.0
+      - name: Set version information in galaxy.yml
+        run: |
+          sed -i -e "s/0.0.0-SNAPSHOT/${{ steps.calculate-version.outputs.version-string }}/g"  galaxy.yml
+      - name: Build and release collection
+        if: ${{ github.event_name == 'push' }}
+        uses: artis3n/ansible_galaxy_collection@v2
+        with:
+          api_key: ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
+  validate-license-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with: 
+          go-version: '1.22'
+      - name: Check license headers
+        run: make check-license-headers

@@ -1,0 +1,26 @@
+# Copyright 2025 Bitshift D.O.O
+# SPDX-License-Identifier: MPL-2.0
+
+---
+- name: Disable short module
+  ansible.builtin.shell: |
+    awk '$5 >= 3071' /etc/ssh/moduli > /etc/ssh/moduli.tmp && mv /etc/ssh/moduli.tmp /etc/ssh/moduli
+  args:
+    creates: /etc/ssh/moduli.tmp
+- name: Create Bastion user if required
+  ansible.builtin.user:
+    name: bastion
+    state: present
+    shell: /usr/sbin/nologin
+  when: "bastion_host"
+- name: Setup hardened SSH configuration
+  ansible.builtin.template:
+    src: 10-liftoff-ssh.conf.j2
+    dest: /etc/ssh/sshd_config.d/10-liftoff-ssh.conf
+    owner: root
+    group: root
+    mode: '0600'
+- name: Reload SSH configuration
+  ansible.builtin.systemd:
+    name: ssh
+    state: reloaded
