@@ -21,15 +21,18 @@ jobs:
           fetch-tags: true
       - name: Configure version information
         id: calculate-version
-        # if: ${{ github.event_name == 'push' }}
         uses: bitshifted/git-auto-semver@v2
         with:
           create_tag: true
           initial_version: 0.1.0
-      - name: Set version information
+      - name: Set version information in galaxy.yml
         run: |
           sed -i -e "s/0.0.0-SNAPSHOT/${{ steps.calculate-version.outputs.version-string }}/g"  galaxy.yml
-          cat galaxy.yml
+      - name: Build and release collection
+        if: ${{ github.event_name == 'push' }}
+        uses: artis3n/ansible_galaxy_collection@v2
+        with:
+          api_key: ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
   validate-license-info:
     runs-on: ubuntu-latest
     steps:
