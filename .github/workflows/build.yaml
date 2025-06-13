@@ -21,11 +21,15 @@ jobs:
           fetch-tags: true
       - name: Configure version information
         id: calculate-version
-        if: ${{ github.event_name == 'push' }}
+        # if: ${{ github.event_name == 'push' }}
         uses: bitshifted/git-auto-semver@v2
         with:
           create_tag: true
           initial_version: 0.1.0
+      - name: Set version information
+        run: |
+          sed -i -e "s/0.0.0-SNAPSHOT/${{ steps.calculate-version.outputs.version-string }}/g"  galaxy.yml
+          cat galaxy.yml
   validate-license-info:
     runs-on: ubuntu-latest
     steps:
