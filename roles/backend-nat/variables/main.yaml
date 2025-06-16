@@ -1,0 +1,5 @@
+---
+# name of private network interface
+private_interface: "enp7s0"
+# list of IP addresses of DNS servers, space separated
+dns_servers: "8.8.8.8 8.8.4.4"
