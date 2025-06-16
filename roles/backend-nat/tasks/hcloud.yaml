@@ -13,6 +13,11 @@
   ansible.builtin.command:
     cmd: /tmp/setup-route.sh
     creates: /tmp/setup-route.sh.done
+- name: Create directory structure for network configuration
+  ansible.builtin.file:
+    path: /etc/systemd/network
+    state: directory
+    mode: '0755'
 - name: Copy persistent configuration
   ansible.builtin.template:
     src: network-setup.j2

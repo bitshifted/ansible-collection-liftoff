@@ -1,0 +1,22 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+platforms:
+  - name: ubuntu2404
+    image: ubuntu:24.04
+    prebuild_image: true
+    user: root
+
+provisioner:
+  name: ansible
+  log: true
+  env:
+    ANSIBLE_ROLES_PATH: ../../../../roles/
+
+verifier:
+  name: ansible
+
