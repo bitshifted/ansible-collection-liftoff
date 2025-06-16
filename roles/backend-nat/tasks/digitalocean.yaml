@@ -1,0 +1,9 @@
+# Copyright 2025 Bitshift D.O.O
+# SPDX-License-Identifier: MPL-2.0
+
+---
+- name: Install ACL package
+  ansible.builtin.apt:
+    name: acl
+    state: present
+    update_cache: true

@@ -1,0 +1,15 @@
+# Copyright 2025 Bitshift D.O.O
+# SPDX-License-Identifier: MPL-2.0
+
+---
+- name: Wait untill server is ready
+  ansible.builtin.wait_for_connection:
+    timeout: 300
+    sleep: 10
+- name: Configure Hetzner Cloud instance
+  ansible.builtin.include_tasks: hcloud.yaml
+  when: provider == 'hcloud'
+- name: Configure Digital Ocean droplet
+  ansible.builtin.include_tasks: digitalocean.yaml
+  when: provider == 'digitalocean'
+
