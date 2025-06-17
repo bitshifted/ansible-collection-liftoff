@@ -1,0 +1,24 @@
+# Copyright 2025 Bitshift D.O.O
+# SPDX-License-Identifier: MPL-2.0
+
+- name: Verify backend NAT configuration
+  hosts: all
+  tasks:
+    - name: Check if NAT is configured
+      command: iptables -t nat -L
+      register: nat_rules
+
+    - name: Assert NAT rules are present
+      assert:
+        that:
+          - nat_rules.stdout is search("POSTROUTING")
+          - nat_rules.stdout is search("PREROUTING")
+
+    - name: Verify connectivity through NAT
+      command: curl -s -o /dev/null -w "%{http_code}" http://<your_backend_service>
+      register: http_response
+
+    - name: Assert HTTP response is 200
+      assert:
+        that:
+          - http_response.stdout == "200"

@@ -1,0 +1,15 @@
+# Copyright 2025 Bitshift D.O.O
+# SPDX-License-Identifier: MPL-2.0
+
+- name: Converge for UFW role
+  hosts: all
+  become: true
+  roles:
+    - ufw
+  vars:
+    ssh_port: 2222
+    ssh_allowed_ip: 10.10.1.1
+    ufw_rules:
+      - port: 8080
+        proto: tcp
+        from_ip: 10.10.10.5

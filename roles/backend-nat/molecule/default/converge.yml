@@ -1,0 +1,11 @@
+# Copyright 2025 Bitshift D.O.O
+# SPDX-License-Identifier: MPL-2.0
+
+- name: Converge for backend NAT role
+  hosts: all
+  become: true
+  roles:
+    - backend-nat
+  vars:
+    gateway_ip: "10.10.1.1"
+    provider: "digitalocean"

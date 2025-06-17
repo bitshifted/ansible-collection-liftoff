@@ -1,0 +1,27 @@
+# Copyright 2025 Bitshift D.O.O
+# SPDX-License-Identifier: MPL-2.0
+
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+platforms:
+  - name: ubuntu2404
+    image: ubuntu:24.04
+    prebuild_image: true
+    # privileged: true
+    # command: /sbin/init
+    # tty: true
+
+provisioner:
+  name: ansible
+  log: true
+  env:
+    ANSIBLE_ROLES_PATH: ../../../../roles/
+
+verifier:
+  name: ansible
+
