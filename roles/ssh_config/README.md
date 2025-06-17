@@ -1,4 +1,4 @@
-# Ansible role ssh-config
+# Ansible role ssh_config
 
 Role intended to configure hardened SSH server. It also allows configuring a user to be used for bastion host.
 

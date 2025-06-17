@@ -5,7 +5,7 @@
   hosts: all
   become: true
   roles:
-    - backend-nat
+    - backend_nat
   vars:
     gateway_ip: "10.10.1.1"
     provider: "digitalocean"

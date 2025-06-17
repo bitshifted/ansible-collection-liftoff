@@ -1,4 +1,4 @@
-# Ansible role backend-nat
+# Ansible role backend_nat
 
 The role that sets up internet connection for backend servers, ie. the servers which are not directly connected 
 to internet. Connection goes through NAT gateway.
